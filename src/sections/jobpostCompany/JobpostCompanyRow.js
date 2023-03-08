@@ -95,7 +95,7 @@ export default function JobpostComanyTableRow({ row, onDeleteRow, onError, onRej
       }]));
     }).catch(error => console.log(error)));
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/employees/${row.employee_id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/employees/${row.employee_id}`,
       method: 'get',
     })
       .then((response) => {
@@ -111,7 +111,7 @@ export default function JobpostComanyTableRow({ row, onDeleteRow, onError, onRej
   const handleAccept = () => {
     if (dayjs(row.start_time).isSameOrBefore(dayjs())) {
       axios({
-        url: `https://stg-api-itjob.unicode.edu.vn/api/v1/job-posts/approval?id=${row.id}`,
+        url: `https://itjobs.azurewebsites.net/api/v1/job-posts/approval?id=${row.id}`,
         method: 'put',
         headers: {
           Authorization: `Bearer ${token}`
@@ -133,7 +133,7 @@ export default function JobpostComanyTableRow({ row, onDeleteRow, onError, onRej
 
     } else {
       axios({
-        url: `https://stg-api-itjob.unicode.edu.vn/api/v1/job-posts/approval?id=${row.id}`,
+        url: `https://itjobs.azurewebsites.net/api/v1/job-posts/approval?id=${row.id}`,
         method: 'put',
         headers: {
           Authorization: `Bearer ${token}`
@@ -159,7 +159,7 @@ export default function JobpostComanyTableRow({ row, onDeleteRow, onError, onRej
   };
   const handleReject = () => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/job-posts/approval?id=${row.id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/job-posts/approval?id=${row.id}`,
       method: 'put',
       headers: {
         Authorization: `Bearer ${token}`

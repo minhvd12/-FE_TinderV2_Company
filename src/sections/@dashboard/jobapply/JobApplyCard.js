@@ -41,7 +41,7 @@ export default function UserCard({ user }) {
 
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/applicants/${user.applicant_id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/applicants/${user.applicant_id}`,
       method: 'get',
     })
       .then((response) => {
@@ -52,7 +52,7 @@ export default function UserCard({ user }) {
 
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/job-positions/${user.job_position_id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/job-positions/${user.job_position_id}`,
       method: 'get',
     })
       .then((response) => {
@@ -63,7 +63,7 @@ export default function UserCard({ user }) {
 
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/working-styles/${user.working_style_id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/working-styles/${user.working_style_id}`,
       method: 'get',
     })
       .then((response) => {
@@ -74,7 +74,7 @@ export default function UserCard({ user }) {
 
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/profile-applicant-skills?page-size=50&profileApplicantId=${user.id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/profile-applicant-skills?page-size=50&profileApplicantId=${user.id}`,
       method: 'get',
     })
       .then((response) => {

@@ -10,7 +10,7 @@ export default function JobSkill({ skiller }) {
   const [Skillerr, setSkills] = useState([]);
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/skills/${skiller.skill_id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/skills/${skiller.skill_id}`,
       method: 'get',
     })
       .then((response) => {

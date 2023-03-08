@@ -44,7 +44,7 @@ export default function EmployeeTableRow({ row, onDeleteRow }) {
   // console.log(row.id)
   const handleDeleteRow = () => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/employees/${row.id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/employees/${row.id}`,
       method: 'delete',
       headers: {
         Authorization: `Bearer ${token}`

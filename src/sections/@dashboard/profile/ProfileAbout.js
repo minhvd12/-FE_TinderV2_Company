@@ -29,7 +29,7 @@ export default function ProfileAbout({ profile }) {
   const [Applicantinfo, setApplicantinfo] = useState([]);
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/working-styles/${profile.working_style_id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/working-styles/${profile.working_style_id}`,
       method: 'get'
     }).then((response) => {
       // console.log(response)
@@ -39,7 +39,7 @@ export default function ProfileAbout({ profile }) {
   }, [profile.working_style_id]);
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/applicants/${profile.applicant_id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/applicants/${profile.applicant_id}`,
       method: 'get'
     }).then((response) => {
       // console.log(response)

@@ -79,7 +79,7 @@ export default function JobPostTableRow({ rows, onDeleteRow, onError, onReject }
       }]));
     }).catch(error => console.log(error)));
     axios({
-        url: `https://stg-api-itjob.unicode.edu.vn/api/v1/employees/${rows.employee_id}`,
+        url: `https://itjobs.azurewebsites.net/api/v1/employees/${rows.employee_id}`,
         method: 'get',
       })
         .then((response) => {
@@ -128,7 +128,7 @@ dayjs.extend(isSameOrBefore)
   const handleAccept = () => {
     if(dayjs(rows.start_time).isSameOrBefore(dayjs())){
       axios({
-        url: `https://stg-api-itjob.unicode.edu.vn/api/v1/job-posts/approval?id=${rows.id}`,
+        url: `https://itjobs.azurewebsites.net/api/v1/job-posts/approval?id=${rows.id}`,
         method: 'put',       
         data: {
           id: rows.id,
@@ -145,7 +145,7 @@ dayjs.extend(isSameOrBefore)
     
     } else {
       axios({
-        url: `https://stg-api-itjob.unicode.edu.vn/api/v1/job-posts/approval?id=${rows.id}`,
+        url: `https://itjobs.azurewebsites.net/api/v1/job-posts/approval?id=${rows.id}`,
         method: 'put',       
         data: {
           id: rows.id,

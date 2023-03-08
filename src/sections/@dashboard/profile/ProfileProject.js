@@ -20,7 +20,7 @@ export default function ProfileProject({ profile }) {
   const [listProject, setlistProject] = useState([]);
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/projects?page-size=50&profileApplicantId=${profile.id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/projects?page-size=50&profileApplicantId=${profile.id}`,
       method: 'get',
     })
       .then((response) => {

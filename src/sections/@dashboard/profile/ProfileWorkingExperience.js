@@ -16,7 +16,7 @@ export default function ProfileWorkingExperience({ profile }) {
   const [WorkingExperience, setWorkingExperience] = useState([]);
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/working-experiences?page-size=50&profileApplicantId=${profile.id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/working-experiences?page-size=50&profileApplicantId=${profile.id}`,
       method: 'get',
     })
       .then((response) => {
