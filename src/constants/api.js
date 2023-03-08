@@ -6,7 +6,7 @@ export const configPathType = {
   api: 'api'
 };
 
-export const baseUrl = 'https://itjobs.azurewebsites.net';
+export const baseUrl = 'https://stg-api-itjob.unicode.edu.vn';
 
 // Company
 export const GET_COMPANY = 'companies';
