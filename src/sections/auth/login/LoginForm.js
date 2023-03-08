@@ -100,7 +100,7 @@ export default function LoginForm() {
       }
       if (company.role === 'EMPLOYEE') {
         axios({
-          url: `https://stg-api-itjob.unicode.edu.vn/api/v1/employees/${company.Id}`,
+          url: `https://itjobs.azurewebsites.net/api/v1/employees/${company.Id}`,
           method: 'get',
           // headers: {
           //   Authorization: `Bearer ${token}`
