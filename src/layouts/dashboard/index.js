@@ -68,7 +68,7 @@ export default function DashboardLayout() {
     setOpenBackDrop(true);
     if (localStorage.getItem('role') === 'EMPLOYEE') {
       axios({
-        url: `https://stg-api-itjob.unicode.edu.vn/api/v1/employees/${localStorage.getItem('user_id')}`,
+        url: `https://itjobs.azurewebsites.net/api/v1/employees/${localStorage.getItem('user_id')}`,
         method: 'get',
         // headers: {
         //   Authorization: `Bearer ${token}`

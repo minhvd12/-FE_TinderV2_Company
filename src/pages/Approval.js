@@ -97,7 +97,7 @@ export default function Approval() {
 
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/job-posts?status=2&companyId=${localStorage.getItem('company_id')}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/job-posts?status=2&companyId=${localStorage.getItem('company_id')}`,
       method: 'get',
     })
       .then((response) => {

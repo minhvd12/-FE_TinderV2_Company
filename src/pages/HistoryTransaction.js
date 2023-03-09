@@ -60,7 +60,7 @@ export default function HistoryTransaction() {
 
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/wallets?companyId=${localStorage.getItem("company_id")}`,
+      url: `hhttps://itjobs.azurewebsites.net/api/v1/wallets?companyId=${localStorage.getItem("company_id")}`,
       method: 'get',
     })
       .then((response) => {
@@ -68,7 +68,7 @@ export default function HistoryTransaction() {
         setWalletId(response.data.data[0].id);
         if (filterStartDate === null || filterEndDate === null) {
           axios({
-            url: `https://stg-api-itjob.unicode.edu.vn/api/v1/transactions?walletId=${response.data.data[0].id}`,
+            url: `https://itjobs.azurewebsites.net/api/v1/transactions?walletId=${response.data.data[0].id}`,
             method: 'get',
           })
             .then((response) => {
@@ -83,7 +83,7 @@ export default function HistoryTransaction() {
         if (filterStartDate !== null && filterEndDate !== null) {
 
           axios({
-            url: `https://stg-api-itjob.unicode.edu.vn/api/v1/transactions?fromDate=${dayjs(filterStartDate).format('YYYY-MM-DD')}&toDate=${dayjs(filterEndDate).add(1, 'day').format('YYYY-MM-DD')}&walletId=${response.data.data[0].id}`,
+            url: `https://itjobs.azurewebsites.net/api/v1/transactions?fromDate=${dayjs(filterStartDate).format('YYYY-MM-DD')}&toDate=${dayjs(filterEndDate).add(1, 'day').format('YYYY-MM-DD')}&walletId=${response.data.data[0].id}`,
             method: 'get',
           })
             .then((response) => {

@@ -26,7 +26,7 @@ export default function UserCards() {
 
     
       axios({
-        url: `https://stg-api-itjob.unicode.edu.vn/api/v1/profile-applicants/like?page-size=50&jobPostId=${event.target.value}`,
+        url: `https://itjobs.azurewebsites.net/api/v1/profile-applicants/like?page-size=50&jobPostId=${event.target.value}`,
         method: 'get',
       })
         .then((response) => {
@@ -41,7 +41,7 @@ export default function UserCards() {
 
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/job-posts?page-size=50&companyId=${localStorage.getItem('company_id')}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/job-posts?page-size=50&companyId=${localStorage.getItem('company_id')}`,
       method: 'get',
       // headers: {
       //   'Authorization': `Bearer ${token}`

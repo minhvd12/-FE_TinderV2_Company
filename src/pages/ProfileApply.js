@@ -70,7 +70,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/applicants/${user.user.applicant_id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/applicants/${user.user.applicant_id}`,
       method: 'get',
     })
       .then((response) => {
@@ -82,7 +82,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/job-positions/${user.user.job_position_id}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/job-positions/${user.user.job_position_id}`,
       method: 'get',
     })
       .then((response) => {
@@ -95,7 +95,7 @@ export default function UserProfile() {
   console.log(jobpostId);
   const onSubmit = () => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/likes`,
+      url: `https://itjobs.azurewebsites.net/api/v1/likes`,
       method: 'post',
       data: {
         job_post_id: jobpostId,

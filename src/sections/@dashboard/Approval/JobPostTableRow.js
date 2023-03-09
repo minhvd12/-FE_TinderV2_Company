@@ -166,7 +166,7 @@ dayjs.extend(isSameOrBefore)
       };
       const handleReject = () => {
         axios({
-          url: `https://stg-api-itjob.unicode.edu.vn/api/v1/job-posts/approval?id=${rows.id}`,
+          url: `https://itjobs.azurewebsites.net/api/v1/job-posts/approval?id=${rows.id}`,
           method: 'put',       
           data: {
             id: rows.id,

@@ -93,7 +93,7 @@ export default function User() {
 
   useEffect(() => {
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/employees?status=1&companyId=${localStorage.getItem('company_id')}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/employees?status=1&companyId=${localStorage.getItem('company_id')}`,
       method: 'get',
     })
       .then((response) => {
@@ -169,7 +169,7 @@ export default function User() {
     console.log(data);
 
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/employees`,
+      url: `https://itjobs.azurewebsites.net/api/v1/employees`,
       method: 'post',
       headers: {
         Authorization: `Bearer ${token}`
