@@ -68,7 +68,7 @@ export default function Profile() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.PUT_EMPLOYEE}/${employeeId}`,
       method: 'put',
       // headers: {
-      //   Authorization: `Bearer ${token}`
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // },
       data
     }).then(() => {
@@ -76,7 +76,7 @@ export default function Profile() {
         url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_EMPLOYEE}/${employeeId}`,
         method: 'get',
         // headers: {
-        //   Authorization: `Bearer ${token}`
+        //   Authorization: `Bearer ${localStorage.getItem("token")}`,
         // }
       }).then((response) => {
         setDisabled(true);

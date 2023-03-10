@@ -53,7 +53,7 @@ export default function DashboardLayout() {
         url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_COMPANY}/${localStorage.getItem('company_id')}`,
         method: 'get',
         // headers: {
-        //   Authorization: `Bearer ${token}`,
+        //   Authorization: `Bearer ${localStorage.getItem("token")}`,
         // }
       }).then((response) => {
         // setCompany(response.data.data);
@@ -71,7 +71,7 @@ export default function DashboardLayout() {
         url: `https://itjobs.azurewebsites.net/api/v1/employees/${localStorage.getItem('user_id')}`,
         method: 'get',
         // headers: {
-        //   Authorization: `Bearer ${token}`
+        //   Authorization: `Bearer ${localStorage.getItem("token")}`,
         // }
       }).then((response) => {
         console.log(response.data.data);

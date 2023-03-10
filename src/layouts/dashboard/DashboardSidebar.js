@@ -251,7 +251,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar, compan
               url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_WALLET}?companyId=${localStorage.getItem('company_id')}`,
               method: 'get',
               // headers: {
-              //   Authorization: `Bearer ${token}`,
+              //   Authorization: `Bearer ${localStorage.getItem("token")}`,
               // }
             }).then((response) => {
               if (response.data.data[0].balance < 5000) {

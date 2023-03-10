@@ -45,7 +45,7 @@ export default function HistoryMatching() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}?companyId=${localStorage.getItem("company_id")}`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // }
     }).then((response) => {
       setListHistory([]);
@@ -57,7 +57,7 @@ export default function HistoryMatching() {
             url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_LIKE}?jobPostId=${item.id}&match=1`,
             method: 'get',
             // headers: {
-            //   Authorization: `Bearer ${token}`
+            //   Authorization: `Bearer ${localStorage.getItem("token")}`,
             // }
           }).then((response) => {
             const listLike = response.data.data;
@@ -67,7 +67,7 @@ export default function HistoryMatching() {
                   url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}/${item.job_post_id}`,
                   method: 'get',
                   // headers: {
-                  //   Authorization: `Bearer ${token}`
+                  //   Authorization: `Bearer ${localStorage.getItem("token")}`,
                   // }
                 }).then((response) => {
                   const jobPost = response.data.data;
@@ -75,7 +75,7 @@ export default function HistoryMatching() {
                     url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_PROFILE_APPLICANT}/${item.profile_applicant_id}`,
                     method: 'get',
                     // headers: {
-                    //   Authorization: `Bearer ${token}`
+                    //   Authorization: `Bearer ${localStorage.getItem("token")}`,
                     // }
                   }).then((response) => {
                     const profileApplicant = response.data.data;
@@ -83,7 +83,7 @@ export default function HistoryMatching() {
                       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_APPLICANT}/${profileApplicant.applicant_id}`,
                       method: "get",
                       // headers: {
-                      //   Authorization: `Bearer ${token}`
+                      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
                       // }
                     }).then((response) => {
                       const applicant = response.data.data;
@@ -157,8 +157,8 @@ export default function HistoryMatching() {
               </Table>
             </TableContainer>
             <TablePagination
-            labelRowsPerPage={'Số hàng mỗi trang'}
-            labelDisplayedRows={({ from, to, count }) => `${from}-${to} trong ${count} `}
+              labelRowsPerPage={'Số hàng mỗi trang'}
+              labelDisplayedRows={({ from, to, count }) => `${from}-${to} trong ${count} `}
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
               count={dataFiltered.length}

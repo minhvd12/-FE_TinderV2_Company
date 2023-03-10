@@ -39,8 +39,8 @@ export default function CreateCompany() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_COMPANIES}?status=1`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
+      // }
     }).then((response) => {
       console.log(response.data.data);
       setListCompany(response.data.data);
@@ -73,7 +73,7 @@ export default function CreateCompany() {
                   url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_USER}?email=${emailUser}`,
                   method: 'get',
                   // headers: {
-                  //   Authorization: `Bearer ${token}`
+                  //   Authorization: `Bearer ${localStorage.getItem("token")}`,
                   // }
                 }).then((response) => {
                   for (let i = 0; i < response.data.data.length; i += 1) {
@@ -83,8 +83,8 @@ export default function CreateCompany() {
                         url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.PUT_USER}?id=${response.data.data[0].id}`,
                         method: 'put',
                         // headers: {
-                        //   Authorization: `Bearer ${token}`
-                        // },
+                        //   Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        // }
                         data: {
                           id: response.data.data[0].id,
                           phone: response.data.data[0].phone,
@@ -99,7 +99,7 @@ export default function CreateCompany() {
                           url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.POST_SEND_MAIL_TO_ADMIN_TO_JOIN_COMPANY}?email=${emailUser}`,
                           method: 'post',
                           // headers: {
-                          //   Authorization: `Bearer ${token}`
+                          //   Authorization: `Bearer ${localStorage.getItem("token")}`,
                           // }
                         }).then(() => {
                           setLoadingButtonConfirm(false);
@@ -196,7 +196,7 @@ function RegisterCompanyForm({ setSeverity, setMessageAlert, setOpenAlert, setOp
       method: 'post',
       headers: {
         'Content-Type': 'multipart/form-data',
-        // Authorization: `Bearer ${token}`,        
+        // Authorization: `Bearer ${localStorage.getItem("token")}`,        
       },
       data: formData
     }).then((response) => {
@@ -206,7 +206,7 @@ function RegisterCompanyForm({ setSeverity, setMessageAlert, setOpenAlert, setOp
         url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_USER}?email=${emailUser}`,
         method: 'get',
         // headers: {
-        //   Authorization: `Bearer ${token}`
+        //   Authorization: `Bearer ${localStorage.getItem("token")}`,
         // }
       }).then((response) => {
         for (let i = 0; i < response.data.data.length; i += 1) {
@@ -217,8 +217,8 @@ function RegisterCompanyForm({ setSeverity, setMessageAlert, setOpenAlert, setOp
               url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.PUT_USER}?id=${element.id}`,
               method: 'put',
               // headers: {
-              //   Authorization: `Bearer ${token}`
-              // },
+              //   Authorization: `Bearer ${localStorage.getItem("token")}`,
+              // }
               data: {
                 id: element.id,
                 phone: element.phone,
@@ -231,8 +231,8 @@ function RegisterCompanyForm({ setSeverity, setMessageAlert, setOpenAlert, setOp
               axios({
                 url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.POST_SEND_MAIL_TO_ADMIN}?email=${getValues('email')}`,
                 method: 'post',
-                // headers:{
-                //   Authorization: `Bearer ${token}`
+                // headers: {
+                //   Authorization: `Bearer ${localStorage.getItem("token")}`,
                 // }
               }).then(() => {
                 if (logo.file) {

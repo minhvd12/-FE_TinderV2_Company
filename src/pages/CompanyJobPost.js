@@ -196,7 +196,7 @@ export default function CompanyJobPost() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}?companyId=${localStorage.getItem('company_id')}&status=4`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // }
     }).then((response) => {
       setLengthJobPostPosting(response.data.data?.length || 0);
@@ -206,7 +206,7 @@ export default function CompanyJobPost() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}?companyId=${localStorage.getItem('company_id')}&status=0`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // }
     }).then((response) => {
       setLengthJobPostActive(response.data.data?.length || 0);
@@ -216,7 +216,7 @@ export default function CompanyJobPost() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}?companyId=${localStorage.getItem('company_id')}&status=1`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // }
     }).then((response) => {
       setLengthJobPostHidden(response.data.data?.length || 0);
@@ -226,7 +226,7 @@ export default function CompanyJobPost() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}?companyId=${localStorage.getItem('company_id')}&status=2`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // }
     }).then((response) => {
       setLengthJobPostPending(response.data.data?.length || 0);
@@ -236,7 +236,7 @@ export default function CompanyJobPost() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}?companyId=${localStorage.getItem('company_id')}&status=3`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // }
     }).then((response) => {
       setLengthJobPostCancel(response.data.data?.length || 0);
@@ -246,7 +246,7 @@ export default function CompanyJobPost() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}?companyId=${localStorage.getItem('company_id')}`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // }
     }).then((response) => {
       setLengthJobPost(response.data.data?.length || 0);
@@ -300,7 +300,7 @@ export default function CompanyJobPost() {
     setFilterName(filterName);
     setPage(0);
   };
- 
+
 
   const dataFiltered = applySortFilter({
     tableData,

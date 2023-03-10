@@ -141,7 +141,7 @@ export default function CreateJobPost() {
 
   const debounceAddress = useCallback(debounce((nextValue) => {
     axios({
-      url: `https://itjobs.azurewebsites.net/api/v1/address?name=${nextValue}`,
+      url: `https://provinces.open-api.vn/api/?depth=${nextValue}`,
       method: 'get',
       // headers: {
       //   'Authorization': `Bearer ${token}`
@@ -193,7 +193,7 @@ export default function CreateJobPost() {
 
   useEffect(() => {
     axios({
-      url: 'https://itjobs.azurewebsites.net/api/v1/address',
+      url: 'https://provinces.open-api.vn/api/',
       method: 'get',
       // headers: {
       //   'Authorization': `Bearer ${token}`
@@ -254,7 +254,7 @@ export default function CreateJobPost() {
           url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOSTSKILL}?jobPostId=${id}`,
           method: 'get',
           // headers: {
-          //   'Authorization': `Bearer ${token}`
+          //   'Authorization': `Bearer ${localStorage.getItem("token")}`
           // }
         }).then((response) => {
           const listJobPostSkill = response.data.data;
@@ -274,14 +274,14 @@ export default function CreateJobPost() {
               url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_SKILL}/${element.skill_id}`,
               method: 'get',
               // headers: {
-              //   Authorization: `Bearer ${token}`
+              //   Authorization: `Bearer ${localStorage.getItem("token")}`
               // }
             }).then((response) => {
               axios({
                 url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_SKILLLEVEL}?skillGroupId=${response.data.data.skill_group_id}`,
                 method: 'get',
                 // headers: {
-                //   'Authorization': `Bearer ${token}`
+                //   'Authorization': `Bearer ${localStorage.getItem("token")}`
                 // }
               }).then((response) => {
                 setListSkillLevel((prev) => ([
@@ -298,7 +298,7 @@ export default function CreateJobPost() {
                 url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_SKILLLEVEL}?skillGroupId=${response.data.data.skill_group_id}&name=${element.skill_level}`,
                 method: 'get',
                 // headers: {
-                //   'Authorization': `Bearer ${token}`
+                //   'Authorization': `Bearer ${localStorage.getItem("token")}`
                 // }
               }).then((response) => {
                 setSkillLevel((prev) => ([
@@ -319,7 +319,7 @@ export default function CreateJobPost() {
             url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_SKILL}`,
             method: 'get',
             // headers: {
-            //   'Authorization': `Bearer ${token}`
+            //   'Authorization': `Bearer ${localStorage.getItem("token")}`
             // },
           }).then((response) => {
             const listSkill = response.data.data;
@@ -335,7 +335,7 @@ export default function CreateJobPost() {
           url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_ALBUMIMAGE}?jobPostId=${id}`,
           method: 'get',
           // headers: {
-          //   'Authorization': `Bearer ${token}`
+          //   'Authorization': `Bearer ${localStorage.getItem("token")}`
           // }
         }).then((response) => {
           // eslint-disable-next-line array-callback-return
@@ -395,14 +395,14 @@ export default function CreateJobPost() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_SKILL}/${value.id}`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // }
     }).then((response) => {
       axios({
         url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_SKILLLEVEL}?skillGroupId=${response.data.data.skill_group_id}`,
         method: 'get',
         // headers: {
-        //   'Authorization': `Bearer ${token}`
+        //   'Authorization': `Bearer ${localStorage.getItem("token")}`
         // },
       }).then((response) => {
         if (skillLevel[index]) {
@@ -553,7 +553,7 @@ export default function CreateJobPost() {
             url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.POST_ALBUMIMAGE}`,
             method: 'post',
             // headers: {
-            //   'Authorization': `Bearer ${token}`
+            //   'Authorization': `Bearer ${localStorage.getItem("token")}`
             // },
             data: formData
           }).then(() => {
@@ -833,7 +833,7 @@ export default function CreateJobPost() {
                   url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_SKILL}`,
                   method: 'get',
                   // headers: {
-                  //   'Authorization': `Bearer ${token}`
+                  //   'Authorization': `Bearer ${localStorage.getItem("token")}`
                   // },
                 }).then((response) => {
                   setListSkill(response.data.data);

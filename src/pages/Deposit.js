@@ -47,12 +47,11 @@ export default function Deposit() {
     } else if (!error.error) {
       setLoadingButton(true);
       axios({
-        url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${
-          api.GET_VNPAY
-        }?ip='::1'&companyId=${localStorage.getItem('company_id')}&amount=${money.replaceAll('.', '')}`,
+        url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_VNPAY
+          }?ip='::1'&companyId=${localStorage.getItem('company_id')}&amount=${money.replaceAll('.', '')}`,
         method: 'get',
         // headers: {
-        //   Authorization: `Bearer ${token}`
+        //   Authorization: `Bearer ${localStorage.getItem("token")}`,
         // }
       })
         .then((response) => {

@@ -251,7 +251,7 @@ export default function JobPost() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}?employeeId=${localStorage.getItem('user_id')}&status=2`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // }
     }).then((response) => {
       setLengthJobPostPending(response.data.data?.length || 0);
@@ -261,7 +261,7 @@ export default function JobPost() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}?employeeId=${localStorage.getItem('user_id')}&status=3`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // }
     }).then((response) => {
       setLengthJobPostCancel(response.data.data?.length || 0);
@@ -275,7 +275,7 @@ export default function JobPost() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}?employeeId=${localStorage.getItem('user_id')}&page=${page + 1}&page-size=${rowsPerPage}&sort-key=CreateDate&sort-order=${sortCreateDate}&status=${statusJobPost}${nextValue ? `&title=${nextValue}` : ''}&status=${statusJobPost}`,
       method: 'get',
       // headers: {
-      //   'Authorization': `Bearer ${token}`
+      //   'Authorization': `Bearer ${localStorage.getItem("token")}`
       // },
     }).then((response) => {
       setListJobPost(response.data?.data);
@@ -284,7 +284,7 @@ export default function JobPost() {
         url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}?employeeId=${localStorage.getItem('user_id')}&sort-key=CreateDate&sort-order=${sortCreateDate}&status=${statusJobPost}${nextValue ? `&title=${nextValue}` : ''}&status=${statusJobPost}`,
         method: 'get',
         // headers: {
-        //   'Authorization': `Bearer ${token}`
+        //   'Authorization': `Bearer ${localStorage.getItem("token")}`
         // },
       }).then((response) => {
         setTotalRow(response.data.data?.length);
@@ -314,7 +314,7 @@ export default function JobPost() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}/${id}`,
       method: 'get',
       // headers: {
-      //   'Authorization': `Bearer ${token}`
+      //   'Authorization': `Bearer ${localStorage.getItem("token")}`
       // }
     }).then((response) => {
       setValue('id', response.data.data.id);
@@ -335,7 +335,7 @@ export default function JobPost() {
         url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOSTSKILL}?jobPostId=${id}`,
         method: 'get',
         // headers: {
-        //   'Authorization': `Bearer ${token}`
+        //   'Authorization': `Bearer ${localStorage.getItem("token")}`
         // }
       }).then((response) => {
         response.data.data.forEach((element, index) => {
@@ -354,14 +354,14 @@ export default function JobPost() {
             url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_SKILL}/${element.skill_id}`,
             method: 'get',
             // headers: {
-            //   Authorization: `Bearer ${token}`
+            //   Authorization: `Bearer ${localStorage.getItem("token")}`,
             // }
           }).then((response) => {
             axios({
               url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_SKILLLEVEL}?skillGroupId=${response.data.data.skill_group_id}`,
               method: 'get',
               // headers: {
-              //   'Authorization': `Bearer ${token}`
+              //   'Authorization': `Bearer ${localStorage.getItem("token")}`
               // }
             }).then((response) => {
               setListSkillLevel((prev) => ([
@@ -378,7 +378,7 @@ export default function JobPost() {
               url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_SKILLLEVEL}?skillGroupId=${response.data.data.skill_group_id}&name=${element.skill_level}`,
               method: 'get',
               // headers: {
-              //   'Authorization': `Bearer ${token}`
+              //   'Authorization': `Bearer ${localStorage.getItem("token")}`
               // }
             }).then((response) => {
               setSkillLevel((prev) => ([
@@ -405,7 +405,7 @@ export default function JobPost() {
         url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_ALBUMIMAGE}?jobPostId=${id}`,
         method: 'get',
         // headers: {
-        //   'Authorization': `Bearer ${token}`
+        //   'Authorization': `Bearer ${localStorage.getItem("token")}`
         // }
       }).then((response) => {
         // eslint-disable-next-line array-callback-return
@@ -491,7 +491,7 @@ export default function JobPost() {
                   url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_JOBPOST}/${idJobPost}`,
                   method: 'get',
                   // headers: {
-                  //   Authorization: `Bearer ${token}`
+                  //   Authorization: `Bearer ${localStorage.getItem("token")}`,
                   // }
                 }).then((response) => {
                   const jobPost = response.data.data;
@@ -536,7 +536,7 @@ export default function JobPost() {
                     url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.PUT_JOBPOST}/${idJobPost}`,
                     method: 'get',
                     // headers: {
-                    //   Authorization: `Bearer ${token}`
+                    //   Authorization: `Bearer ${localStorage.getItem("token")}`,
                     // }
                   }).then((response) => {
                     setRefreshData(!refreshData);

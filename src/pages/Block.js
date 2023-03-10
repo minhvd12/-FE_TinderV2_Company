@@ -32,7 +32,7 @@ export default function Block() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_BLOCK}?companyId=${localStorage.getItem('company_id')}&blockBy=${localStorage.getItem('company_id')}&page-size=${rowsPerPage}&page=${page + 1}`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`,
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // }
     }).then((response) => {
       response.data.data?.forEach((item) => {
@@ -40,7 +40,7 @@ export default function Block() {
           url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_APPLICANT}/${item.applicant_id}`,
           method: 'get',
           // headers: {
-          //   Authorization: `Bearer ${token}`,
+          //   Authorization: `Bearer ${localStorage.getItem("token")}`,
           // }
         }).then((response) => {
           setListApplicant((prev) => [...prev, response.data.data]);
@@ -53,7 +53,7 @@ export default function Block() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_BLOCK}?companyId=${localStorage.getItem('company_id')}&blockBy=${localStorage.getItem('company_id')}`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`,
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // }
     }).then((response) => {
       setTotalRow(response.data.data?.length);
@@ -76,14 +76,14 @@ export default function Block() {
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_BLOCK}?companyId=${localStorage.getItem('company_id')}&blockBy=${localStorage.getItem('company_id')}&applicantId=${applicantId}`,
       method: 'get',
       // headers: {
-      //   Authorization: `Bearer ${token}`,
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
       // }
     }).then((response) => {
       axios({
         url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.DELETE_BLOCK}/${response.data.data[0].id}`,
         method: 'delete',
         // headers: {
-        //   Authorization: `Bearer ${token}`,
+        //   Authorization: `Bearer ${localStorage.getItem("token")}`,
         // }
       }).then(() => {
         setSeverity('success');
@@ -179,8 +179,8 @@ export default function Block() {
             </TableContainer>
             {listApplicant?.length > 0 && (
               <TablePagination
-              labelRowsPerPage={'Số hàng mỗi trang'}
-              labelDisplayedRows={({ from, to, count }) => `${from}-${to} trong ${count} `}
+                labelRowsPerPage={'Số hàng mỗi trang'}
+                labelDisplayedRows={({ from, to, count }) => `${from}-${to} trong ${count} `}
                 rowsPerPageOptions={[5, 10, 15, 20, 25]}
                 component="div"
                 count={totalRow}

@@ -42,7 +42,7 @@ export async function listProfileApplicant() {
   // const listProfileApplicant = async () => {
 
     await axios({
-      url: 'https://stg-api-itjob.unicode.edu.vn/api/v1/profile-applicants',
+      url: 'https://itjobs.azurewebsites.net/api/v1/profile-applicants',
       method: 'get'
     }).then((response) => {
       console.log(response)
