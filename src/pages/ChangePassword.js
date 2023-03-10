@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Token } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { IconButton, InputAdornment, Stack } from "@mui/material";
 import { Container } from "@mui/system";
@@ -49,9 +50,9 @@ export default function ChangePassword() {
       axios({
         url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.PUT_UPDATE_PASSWORD_EMPLOYEE}?id=${localStorage.getItem('user_id')}&currentPassword=${data.passwordOld}&newPassword=${data.passwordNew}`,
         method: 'put',
-        // headers: {
-        //   Authorization: `Bearer ${token}`,
-        // },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       }).then(() => {
         setLoadingButton(false);
         setSeverity('success');
@@ -76,9 +77,9 @@ export default function ChangePassword() {
       axios({
         url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.PUT_UPDATE_PASSWORD_USER}?id=${localStorage.getItem('user_id')}&currentPassword=${data.passwordOld}&newPassword=${data.passwordNew}`,
         method: 'put',
-        // headers: {
-        //   Authorization: `Bearer ${token}`,
-        // },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       }).then(() => {
         setLoadingButton(false);
         setSeverity('success');

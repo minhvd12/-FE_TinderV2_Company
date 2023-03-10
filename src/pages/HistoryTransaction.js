@@ -60,10 +60,12 @@ export default function HistoryTransaction() {
 
   useEffect(() => {
     axios({
-      url: `hhttps://itjobs.azurewebsites.net/api/v1/wallets?companyId=${localStorage.getItem("company_id")}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/wallets?companyId=${localStorage.getItem("company_id")}`,
       method: 'get',
     })
-      .then((response) => {
+      
+    .then((response) => {
+        console.log(response);
         console.log(response.data.data[0].id);
         setWalletId(response.data.data[0].id);
         if (filterStartDate === null || filterEndDate === null) {
@@ -298,13 +300,28 @@ export default function HistoryTransaction() {
 // ----------------------------------------------------------------------
 
 function applySortFilter({ tableData, comparator, filterStatus }) {
+  if (!tableData) {
+    return []; // or some other default value
+  }
   const stabilizedThis = tableData.map((el, index) => [el, index]);
-
+  
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
+  
+  // rest of the function
+
+
+// function applySortFilter({ tableData, comparator, filterStatus }) {
+//   const stabilizedThis = tableData.map((el, index) => [el, index]);
+  
+//   stabilizedThis.sort((a, b) => {
+//     const order = comparator(a[0], b[0]);
+//     if (order !== 0) return order;
+//     return a[1] - b[1];
+//   });
 
   tableData = stabilizedThis.map((el) => el[0]);
 
