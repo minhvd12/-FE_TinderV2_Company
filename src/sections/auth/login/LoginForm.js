@@ -1,7 +1,28 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 // @mui
-import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, MenuItem, Select, Stack, Tab, Tabs, TextField, Typography } from '@mui/material';
+import {
+  Autocomplete,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormControl,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  Link,
+  MenuItem,
+  Select,
+  Stack,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
 // components
 import axios from 'axios';
@@ -27,7 +48,7 @@ export default function LoginForm() {
   const [confirmMail, setConfirmMail] = useState({
     code: '',
     error: false,
-    message: ''
+    message: '',
   });
   const [loadingButtonDone, setLoadingButtonDone] = useState(false);
   const [disableButtonDone, setDisableButtonDone] = useState(true);
@@ -57,9 +78,7 @@ export default function LoginForm() {
     defaultValues,
   });
 
-  const {
-    handleSubmit, getValues, reset
-  } = methods;
+  const { handleSubmit, getValues, reset } = methods;
 
   const onSubmit = async (data) => {
     setEmailUser(data.email);
@@ -72,147 +91,157 @@ export default function LoginForm() {
       // },
       data: {
         email: data.email,
-        password: data.password
-      }
-    }).then((response) => {
-      // console.log(response);
+        password: data.password,
+      },
+    })
+      .then((response) => {
+        console.log(response);
 
+        if (response.data.detail === 'User or password not correct!!! ') {
+          setSeverity('error');
+          setMessageAlert('Sai tài khoản hoặc mật khẩu');
+          setOpenAlert(true);
+          localStorage.clear();
+          // eslint-disable-next-line consistent-return
+          return;
+        }
+        const company = jwtDecode(response.data.token);
+        if (company.role === 'ADMIN') {
+          setSeverity('error');
+          setMessageAlert('Admin không được truy cập vào đây');
+          setOpenAlert(true);
+          localStorage.clear();
+          setLoadingButtonLogin(false);
+          // eslint-disable-next-line consistent-return
+          return;
+        }
+        localStorage.setItem('token', response.data.token);
+        // console.log(company);
 
-      // if (response.data.detail === 'User or password not correct!!! ') {
-      //   setSeverity('error');
-      //   setMessageAlert('Sai tài khoản hoặc mật khẩu');
-      //   setOpenAlert(true);
-      //   localStorage.clear();
-      //   // eslint-disable-next-line consistent-return
-      //   return;
-      // }
-      localStorage.setItem('token', response.data.token);
-      const company = jwtDecode(response.data.token);
+        // console.log(company)
+        if (company.role === 'COMPANY') {
+          localStorage.setItem('user_id', company.Id);
+          localStorage.setItem('company_id', company.Id);
+          localStorage.setItem('role', company.role);
+          setLoadingButtonLogin(false);
+          navigate('/company/dashboard?status=logged', { replace: true });
+        }
+        if (company.role === 'EMPLOYEE') {
+          axios({
+            url: `https://itjobs.azurewebsites.net/api/v1/employees/${company.Id}`,
+            method: 'get',
+            // headers: {
+            //   Authorization: `Bearer ${token}`
+            // }
+          })
+            .then((response) => {
+              console.log(response);
+              if (response.data.data.status === 0) {
+                setSeverity('error');
+                setMessageAlert('Tài khoản của bạn đã bị xoá khỏi công ty');
+                setOpenAlert(true);
+                localStorage.clear();
+                setLoadingButtonLogin(false);
+              } else {
+                // console.log(response.data.data)
+                localStorage.setItem('user_id', company.Id);
+                localStorage.setItem('role', company.role);
+                localStorage.setItem('company_id', response.data.data.company_id);
+                setLoadingButtonLogin(false);
+                navigate('/employee/dashboard?status=logged', { replace: true });
+              }
+            })
+            .catch((error) => console.log(error));
+        }
 
-      // console.log(company)
-      if (company.role === 'COMPANY') {
+        // axios({
+        //   url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.PUT_JOBPOST}/${IdUser}`,
+        //   method: 'get',
+        //   // headers: {
+        //   //   Authorization: `Bearer ${token}`
+        //   // }
+        // }).then((response) => {
+        //   setRefreshData(!refreshData);
+        //   setLoadingButtonHidden(false);
+        //   setOpenDialogHidden(false);
+        //   setOpenAlert(true);
+        //   setSeverity('success');
+        //   setMessageAlert('Ẩn bài viết tuyển dụng thành công');
+        //   const action = addMoney(response.data.data.money);
+        //   dispatch(action);
+        // }).catch(error => console.log(error));
 
-        localStorage.setItem('user_id', company.Id);
-        localStorage.setItem('company_id', company.Id);
-        localStorage.setItem('role', company.role);
+        //         localStorage.setItem('company_id', IdUser);
+        //         setLoadingButtonLogin(false);
+        //         navigate('/dashboard/app?status=logged', { replace: true });
+        // if (response.data.token.result.msg.trim() === 'Your account not have any company, please create your company!!!') {
+        //   setLoadingButtonLogin(false);
+        //   navigate('/dashboard/create-company', { replace: true });
+        // } else if (response.data.token.result.msg.trim() === 'Your account not approved yet, please wait for admin approved!!!') {
+        //   navigate('/dashboard/show-information-join');
+        // } else if (response.data.token.result.msg.trim() === 'Your company not approved yet, please wait for admin approved!!!') {
+        //   navigate('/dashboard/show-information-create');
+        // } else if (response.data.token.result.msg.trim() === 'Login success!!!') {
+        //   axios({
+        //     url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_USER}?email=${getValues('email')}`,
+        //     method: 'get',
+        //     // headers: {
+        //     //   Authorization: `Bearer ${token}`,
+        //     // }
+        //   }).then((response) => {
+        //     for (let i = 0; i < response.data.data.length; i += 1) {
+        //       const element = response.data.data[i];
+        //       if (element.email === getValues('email')) {
+        //         localStorage.setItem('user_id', element.id);
+        //         localStorage.setItem('company_id', element.company_id);
+        //         setLoadingButtonLogin(false);
+        //         navigate('/dashboard/app?status=logged', { replace: true });
+        //       }
+        //     }
+        //   });
+        // }
+      })
+      .catch((error) => {
+        // console.log(error.response);
         setLoadingButtonLogin(false);
-        navigate('/company/dashboard?status=logged', { replace: true });
-      }
-      if (company.role === 'EMPLOYEE') {
-        axios({
-          url: `https://itjobs.azurewebsites.net/api/v1/employees/${company.Id}`,
-          method: 'get',
-          // headers: {
-          //   Authorization: `Bearer ${token}`
-          // }
-        }).then((response) => {
-          console.log(response);
-          if (response.data.data.status === 0) {
-            setSeverity('error');
-            setMessageAlert('Tài khoản của bạn đã bị xoá khỏi công ty');
-            setOpenAlert(true);
-            localStorage.clear();
-            setLoadingButtonLogin(false);
-          } else {
-            // console.log(response.data.data)
-            localStorage.setItem('user_id', company.Id);
-            localStorage.setItem('role', company.role);
-            localStorage.setItem('company_id', response.data.data.company_id);
-            setLoadingButtonLogin(false);
-            navigate('/employee/dashboard?status=logged', { replace: true });
-          }
 
-
-        }).catch(error => console.log(error));
-      }
-
-
-
-      // axios({
-      //   url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.PUT_JOBPOST}/${IdUser}`,
-      //   method: 'get',
-      //   // headers: {
-      //   //   Authorization: `Bearer ${token}`
-      //   // }
-      // }).then((response) => {
-      //   setRefreshData(!refreshData);
-      //   setLoadingButtonHidden(false);
-      //   setOpenDialogHidden(false);
-      //   setOpenAlert(true);
-      //   setSeverity('success');
-      //   setMessageAlert('Ẩn bài viết tuyển dụng thành công');
-      //   const action = addMoney(response.data.data.money);
-      //   dispatch(action);
-      // }).catch(error => console.log(error));
-
-
-      //         localStorage.setItem('company_id', IdUser);
-      //         setLoadingButtonLogin(false);
-      //         navigate('/dashboard/app?status=logged', { replace: true });
-      // if (response.data.token.result.msg.trim() === 'Your account not have any company, please create your company!!!') {
-      //   setLoadingButtonLogin(false);
-      //   navigate('/dashboard/create-company', { replace: true });
-      // } else if (response.data.token.result.msg.trim() === 'Your account not approved yet, please wait for admin approved!!!') {
-      //   navigate('/dashboard/show-information-join');
-      // } else if (response.data.token.result.msg.trim() === 'Your company not approved yet, please wait for admin approved!!!') {
-      //   navigate('/dashboard/show-information-create');
-      // } else if (response.data.token.result.msg.trim() === 'Login success!!!') {
-      //   axios({
-      //     url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_USER}?email=${getValues('email')}`,
-      //     method: 'get',
-      //     // headers: {
-      //     //   Authorization: `Bearer ${token}`,
-      //     // }
-      //   }).then((response) => {
-      //     for (let i = 0; i < response.data.data.length; i += 1) {
-      //       const element = response.data.data[i];
-      //       if (element.email === getValues('email')) {
-      //         localStorage.setItem('user_id', element.id);
-      //         localStorage.setItem('company_id', element.company_id);
-      //         setLoadingButtonLogin(false);
-      //         navigate('/dashboard/app?status=logged', { replace: true });
-      //       }
-      //     }
-      //   });
-      // }
-    }).catch((error) => {
-      // console.log(error.response);
-      setLoadingButtonLogin(false);
-
-      if (error.response.data.detail === 'Your account not verify, please verify your account and login again!!!') {
-        setSeverity('error');
-        setMessageAlert('Tài khoản của bạn chưa xác thực otp.Vui lòng xác thực');
-        setOpenAlert(true);
-        axios({
-          url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.POST_SEND_CODE_CONFIRM_MAIL}?email=${getValues('email')}`,
-          method: 'POST',
-          // headers: {
-          //   Authorization: `Bearer ${token}`
-          // },
-        }).then(() => setOpenDialogConfirmMail(true))
-          .catch(error => {
-            console.log(error);
-            setSeverity('error');
-            setMessageAlert('Gửi email xác thực không thành công');
-            setOpenAlert(true);
-          });
-      } else if (error.response.data.detail.trim() === 'you have not been approved, please wait for the admin to approve and log in again!!!') {
-        setSeverity('error');
-        setMessageAlert('Công ty của bạn chưa được admin phê duyệt, vui lòng đợi Admin phê duyệt');
-        setOpenAlert(true);
-
-      } else if (error.response.data.detail.trim() === 'Email or password not correct!!!') {
-        setSeverity('error');
-        setMessageAlert('Sai tài khoản hoặc mật khẩu');
-        setOpenAlert(true);
-
-      } else {
-
-        setSeverity('error');
-        setMessageAlert('Có lỗi xảy ra.Vui lòng thử lại sau');
-        setOpenAlert(true);
-      }
-    });
+        if (error.response.data.detail === 'Your account not verify, please verify your account and login again!!!') {
+          setSeverity('error');
+          setMessageAlert('Tài khoản của bạn chưa xác thực otp.Vui lòng xác thực');
+          setOpenAlert(true);
+          axios({
+            url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${
+              api.POST_SEND_CODE_CONFIRM_MAIL
+            }?email=${getValues('email')}`,
+            method: 'POST',
+            // headers: {
+            //   Authorization: `Bearer ${token}`
+            // },
+          })
+            .then(() => setOpenDialogConfirmMail(true))
+            .catch((error) => {
+              console.log(error);
+              setSeverity('error');
+              setMessageAlert('Gửi email xác thực không thành công');
+              setOpenAlert(true);
+            });
+        } else if (
+          error.response.data.detail.trim() ===
+          'you have not been approved, please wait for the admin to approve and log in again!!!'
+        ) {
+          setSeverity('error');
+          setMessageAlert('Công ty của bạn chưa được admin phê duyệt, vui lòng đợi Admin phê duyệt');
+          setOpenAlert(true);
+        } else if (error.response.data.detail.trim() === 'Email or password not correct!!!') {
+          setSeverity('error');
+          setMessageAlert('Sai tài khoản hoặc mật khẩu');
+          setOpenAlert(true);
+        } else {
+          setSeverity('error');
+          setMessageAlert('Có lỗi xảy ra.Vui lòng thử lại sau');
+          setOpenAlert(true);
+        }
+      });
   };
   return (
     <>
@@ -237,11 +266,14 @@ export default function LoginForm() {
         </Stack>
 
         <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 2 }}>
-          <Link variant="subtitle2" underline="hover" sx={{
-            '&:hover': {
-              cursor: 'pointer'
-            }
-          }}
+          <Link
+            variant="subtitle2"
+            underline="hover"
+            sx={{
+              '&:hover': {
+                cursor: 'pointer',
+              },
+            }}
             onClick={() => {
               setEmailUser('');
               setOpenDialogForgetPassword(true);
@@ -256,56 +288,74 @@ export default function LoginForm() {
         </LoadingButton>
       </FormProvider>
 
-      <Dialog
-        open={openDialogConfirmMail}
-      >
+      <Dialog open={openDialogConfirmMail}>
         <DialogTitle>Xác thực email</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Nhập mã chúng tôi đã gửi đến <b>{getValues('email')}</b>. Nếu bạn không nhận được email, hãy kiểm tra thư mục rác của bạn.
+            Nhập mã chúng tôi đã gửi đến <b>{getValues('email')}</b>. Nếu bạn không nhận được email, hãy kiểm tra thư
+            mục rác của bạn.
           </DialogContentText>
-          <TextField value={confirmMail.code} style={{ marginTop: 10 }} label='Nhập mã xác thực' variant='standard' fullWidth onChange={(event) => {
-            const { value } = event.target;
-            if (!value.match(/^[0-9]+$/)) {
-              setDisableButtonDone(true);
-              return setConfirmMail({
-                code: value,
-                error: true,
-                message: 'Mã xác thực chỉ chứa các chữ số'
-              });
-            }
-            if (value.length > 4) {
-              setDisableButtonDone(true);
-              return setConfirmMail({
-                code: value,
-                error: true,
-                message: 'Mã xác thực gồm 4 chữ số'
-              });
-            }
-            setDisableButtonDone(false);
-            return setConfirmMail({ code: value, error: false, message: '' });
-          }} />
+          <TextField
+            value={confirmMail.code}
+            style={{ marginTop: 10 }}
+            label="Nhập mã xác thực"
+            variant="standard"
+            fullWidth
+            onChange={(event) => {
+              const { value } = event.target;
+              if (!value.match(/^[0-9]+$/)) {
+                setDisableButtonDone(true);
+                return setConfirmMail({
+                  code: value,
+                  error: true,
+                  message: 'Mã xác thực chỉ chứa các chữ số',
+                });
+              }
+              if (value.length > 4) {
+                setDisableButtonDone(true);
+                return setConfirmMail({
+                  code: value,
+                  error: true,
+                  message: 'Mã xác thực gồm 4 chữ số',
+                });
+              }
+              setDisableButtonDone(false);
+              return setConfirmMail({ code: value, error: false, message: '' });
+            }}
+          />
           {confirmMail.error && <p style={{ color: 'red' }}>{confirmMail.message}</p>}
           <DialogActions>
-            <LoadingButton disabled={disableButtonDone} loading={loadingButtonDone} style={{ marginTop: 20 }} variant='contained' onClick={() => {
-              setLoadingButtonDone(true);
-              axios({
-                url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.POST_CHECK_CODE_CONFIRM_MAIL}?code=${confirmMail.code}&email=${getValues('email')}`,
-                method: 'POST',
-                // headers: {
-                //   Authorization: `Bearer ${token}`
-                // },
-              }).then(() => {
-                setLoadingButtonDone(false);
-                window.location.assign('/login?status=verified');
-              }).catch(error => {
-                console.log(error);
-                setLoadingButtonDone(false);
-                setSeverity('error');
-                setMessageAlert('Xác thực không thành công');
-                setOpenAlert(true);
-              });
-            }}>Hoàn thành</LoadingButton>
+            <LoadingButton
+              disabled={disableButtonDone}
+              loading={loadingButtonDone}
+              style={{ marginTop: 20 }}
+              variant="contained"
+              onClick={() => {
+                setLoadingButtonDone(true);
+                axios({
+                  url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${
+                    api.POST_CHECK_CODE_CONFIRM_MAIL
+                  }?code=${confirmMail.code}&email=${getValues('email')}`,
+                  method: 'POST',
+                  // headers: {
+                  //   Authorization: `Bearer ${token}`
+                  // },
+                })
+                  .then(() => {
+                    setLoadingButtonDone(false);
+                    window.location.assign('/login?status=verified');
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                    setLoadingButtonDone(false);
+                    setSeverity('error');
+                    setMessageAlert('Xác thực không thành công');
+                    setOpenAlert(true);
+                  });
+              }}
+            >
+              Hoàn thành
+            </LoadingButton>
           </DialogActions>
         </DialogContent>
       </Dialog>
@@ -401,13 +451,18 @@ export default function LoginForm() {
         </DialogContent>
       </Dialog> */}
 
-      <DialogForgetPassword setOpenDialogForgetPassword={setOpenDialogForgetPassword} openDialogForgetPassword={openDialogForgetPassword} setSeverity={setSeverity} setMessageAlert={setMessageAlert} setOpenAlert={setOpenAlert} />
+      <DialogForgetPassword
+        setOpenDialogForgetPassword={setOpenDialogForgetPassword}
+        openDialogForgetPassword={openDialogForgetPassword}
+        setSeverity={setSeverity}
+        setMessageAlert={setMessageAlert}
+        setOpenAlert={setOpenAlert}
+      />
 
       <AlertMessage openAlert={openAlert} setOpenAlert={setOpenAlert} alertMessage={messageAlert} severity={severity} />
     </>
   );
-};
-
+}
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -422,7 +477,9 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography component={'span'} variant={'body2'}>{children}</Typography>
+          <Typography component={'span'} variant={'body2'}>
+            {children}
+          </Typography>
         </Box>
       )}
     </div>
@@ -433,7 +490,10 @@ function RegisterCompanyForm({ setSeverity, setMessageAlert, setOpenAlert, setOp
   const schema = Yup.object().shape({
     name: Yup.string().required('Vui lòng nhập tên công ty'),
     email: Yup.string().email('Địa chỉ email không hợp lệ').required('Vui lòng nhập địa chỉ email'),
-    phone: Yup.string().required('Vui lòng nhập số điện thoại').matches(/^[0-9]+$/, "Số điện thoại không hợp lệ").max(10, 'Số điện thoại không hợp lệ'),
+    phone: Yup.string()
+      .required('Vui lòng nhập số điện thoại')
+      .matches(/^[0-9]+$/, 'Số điện thoại không hợp lệ')
+      .max(10, 'Số điện thoại không hợp lệ'),
     website: Yup.string().required('Vui lòng nhập địa chỉ website'),
     description: Yup.string().required('Vui lòng nhập mô tả công ty'),
     taxCode: Yup.string().required('Vui lòng nhập mã số thuế'),
@@ -446,7 +506,13 @@ function RegisterCompanyForm({ setSeverity, setMessageAlert, setOpenAlert, setOp
     error: false,
   });
 
-  const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    getValues,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
@@ -455,8 +521,8 @@ function RegisterCompanyForm({ setSeverity, setMessageAlert, setOpenAlert, setOp
       phone: '',
       website: '',
       description: '',
-      taxCode: ''
-    }
+      taxCode: '',
+    },
   });
 
   const onSubmit = (data) => {
@@ -483,69 +549,75 @@ function RegisterCompanyForm({ setSeverity, setMessageAlert, setOpenAlert, setOp
       method: 'post',
       headers: {
         'Content-Type': 'multipart/form-data',
-        // Authorization: `Bearer ${token}`,        
+        // Authorization: `Bearer ${token}`,
       },
-      data: formData
-    }).then((response) => {
-      const companyId = response.data.data.id;
+      data: formData,
+    })
+      .then((response) => {
+        const companyId = response.data.data.id;
 
-      axios({
-        url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_USER}?email=${emailUser}`,
-        method: 'get',
-        // headers: {
-        //   Authorization: `Bearer ${token}`
-        // }
-      }).then((response) => {
-        for (let i = 0; i < response.data.data.length; i += 1) {
-          const element = response.data.data[i];
-          if (element.email === emailUser) {
-            // update companyId and status = 4 for user
-            axios({
-              url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.PUT_USER}?id=${element.id}`,
-              method: 'put',
-              // headers: {
-              //   Authorization: `Bearer ${token}`
-              // },
-              data: {
-                id: element.id,
-                phone: element.phone,
-                email: element.email,
-                role_id: element.role_id,
-                status: 5,
-                company_id: companyId,
-              }
-            }).then(() => {
+        axios({
+          url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_USER}?email=${emailUser}`,
+          method: 'get',
+          // headers: {
+          //   Authorization: `Bearer ${token}`
+          // }
+        }).then((response) => {
+          for (let i = 0; i < response.data.data.length; i += 1) {
+            const element = response.data.data[i];
+            if (element.email === emailUser) {
+              // update companyId and status = 4 for user
               axios({
-                url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.POST_SEND_MAIL_TO_ADMIN}?email=${getValues('email')}`,
-                method: 'post',
-                // headers:{
+                url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.PUT_USER}?id=${element.id}`,
+                method: 'put',
+                // headers: {
                 //   Authorization: `Bearer ${token}`
-                // }
-              }).then(() => {
-                if (logo.file) {
-                  URL.revokeObjectURL(logo.file.preview);
-                  setLogo({ file: null, error: false });
-                }
-                setLoadingButtonRegister(false);
-                setSeverity('success');
-                setMessageAlert('Đăng ký công ty thành công, công ty của bạn đang được admin phê duyệt');
-                setOpenAlert(true);
-                setOpenDialog(false);
-                reset();
-              }).catch(error => console.log(error));
-            }).catch(error => console.log(error));
+                // },
+                data: {
+                  id: element.id,
+                  phone: element.phone,
+                  email: element.email,
+                  role_id: element.role_id,
+                  status: 5,
+                  company_id: companyId,
+                },
+              })
+                .then(() => {
+                  axios({
+                    url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${
+                      api.POST_SEND_MAIL_TO_ADMIN
+                    }?email=${getValues('email')}`,
+                    method: 'post',
+                    // headers:{
+                    //   Authorization: `Bearer ${token}`
+                    // }
+                  })
+                    .then(() => {
+                      if (logo.file) {
+                        URL.revokeObjectURL(logo.file.preview);
+                        setLogo({ file: null, error: false });
+                      }
+                      setLoadingButtonRegister(false);
+                      setSeverity('success');
+                      setMessageAlert('Đăng ký công ty thành công, công ty của bạn đang được admin phê duyệt');
+                      setOpenAlert(true);
+                      setOpenDialog(false);
+                      reset();
+                    })
+                    .catch((error) => console.log(error));
+                })
+                .catch((error) => console.log(error));
+            }
           }
-        }
-
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoadingButtonRegister(false);
+        setSeverity('error');
+        setMessageAlert('Đăng ký công ty không thành công');
+        setOpenAlert(true);
       });
-
-    }).catch(error => {
-      console.log(error);
-      setLoadingButtonRegister(false);
-      setSeverity('error');
-      setMessageAlert('Đăng ký công ty không thành công');
-      setOpenAlert(true);
-    });
   };
 
   const onError = (error) => {
@@ -580,9 +652,11 @@ function RegisterCompanyForm({ setSeverity, setMessageAlert, setOpenAlert, setOp
                 setCompanyType(event.target.value);
               }}
             >
-              {common.STATUS_COMPANY.map((element, index) =>
-                <MenuItem key={index} value={element.value}>{element.label}</MenuItem>
-              )}
+              {common.STATUS_COMPANY.map((element, index) => (
+                <MenuItem key={index} value={element.value}>
+                  {element.label}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
@@ -592,7 +666,7 @@ function RegisterCompanyForm({ setSeverity, setMessageAlert, setOpenAlert, setOp
           <p style={{ color: 'red' }}>{errors.email?.message}</p>
         </Grid>
         <Grid item xs={6}>
-          <TextField type='number' fullWidth name="phone" {...register('phone')} label="Số điện thoại" />
+          <TextField type="number" fullWidth name="phone" {...register('phone')} label="Số điện thoại" />
           <p style={{ color: 'red' }}>{errors.phone?.message}</p>
         </Grid>
         <Grid item xs={12}>
@@ -600,25 +674,30 @@ function RegisterCompanyForm({ setSeverity, setMessageAlert, setOpenAlert, setOp
           <p style={{ color: 'red' }}>{errors.description?.message}</p>
         </Grid>
         <Grid item xs={6}>
-          <TextField type='number' fullWidth name="taxCode" {...register('taxCode')} label="Mã số thuế" />
+          <TextField type="number" fullWidth name="taxCode" {...register('taxCode')} label="Mã số thuế" />
           <p style={{ color: 'red' }}>{errors.taxCode?.message}</p>
         </Grid>
         <Grid item xs={6}>
-          <Button variant='outlined' component='label'>
+          <Button variant="outlined" component="label">
             Tải lên ảnh logo công ty
-            <input hidden accept='image/*' type='file' onChange={(event) => {
-              const file = event.target.files[0];
-              file.preview = URL.createObjectURL(file);
-              setLogo({ file, error: false });
-            }} />
+            <input
+              hidden
+              accept="image/*"
+              type="file"
+              onChange={(event) => {
+                const file = event.target.files[0];
+                file.preview = URL.createObjectURL(file);
+                setLogo({ file, error: false });
+              }}
+            />
           </Button>
           {logo.file?.preview && (
-            <img style={{ marginTop: 10, height: 200, objectFit: 'contain' }} src={logo.file.preview} alt='hinhanh' />
+            <img style={{ marginTop: 10, height: 200, objectFit: 'contain' }} src={logo.file.preview} alt="hinhanh" />
           )}
           {logo.error && <p style={{ color: 'red' }}>Vui lòng tải lên ảnh logo công ty</p>}
         </Grid>
         <Grid item xs={12}>
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={loadingButtonRegister} >
+          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={loadingButtonRegister}>
             Đăng kí
           </LoadingButton>
         </Grid>
@@ -627,7 +706,13 @@ function RegisterCompanyForm({ setSeverity, setMessageAlert, setOpenAlert, setOp
   );
 }
 
-function DialogForgetPassword({ openDialogForgetPassword, setOpenDialogForgetPassword, setSeverity, setMessageAlert, setOpenAlert }) {
+function DialogForgetPassword({
+  openDialogForgetPassword,
+  setOpenDialogForgetPassword,
+  setSeverity,
+  setMessageAlert,
+  setOpenAlert,
+}) {
   const [countDown, setCountDown] = useState(1);
   const [sentEmail, setSentEmail] = useState(false);
   const [loadingSendCode, setLoadingSendCode] = useState(false);
@@ -635,7 +720,7 @@ function DialogForgetPassword({ openDialogForgetPassword, setOpenDialogForgetPas
 
   useEffect(() => {
     const timerId = setInterval(() => {
-      setCountDown(prev => prev - 1);
+      setCountDown((prev) => prev - 1);
     }, 1000);
     if (countDown === 0) {
       clearInterval(timerId);
@@ -648,17 +733,23 @@ function DialogForgetPassword({ openDialogForgetPassword, setOpenDialogForgetPas
   const schema = Yup.object().shape({
     email: Yup.string().email('Địa chỉ email không hợp lệ').required('Vui lòng nhập địa chỉ email'),
     code: Yup.string().required('Vui lòng nhập mã xác nhận').length(4, 'Mã xác nhận phải là 4 ký tự'),
-    password: Yup.string().required('Vui lòng nhập mật khẩu')
+    password: Yup.string().required('Vui lòng nhập mật khẩu'),
   });
 
-  const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    getValues,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
       email: '',
       code: '',
-      password: ''
-    }
+      password: '',
+    },
   });
 
   const onSubmit = (data) => {
@@ -669,26 +760,28 @@ function DialogForgetPassword({ openDialogForgetPassword, setOpenDialogForgetPas
       // headers:{
       //   Authorization: `Bearer ${token}`
       // }
-    }).then(() => {
-      setMessageAlert('Thay đổi mật khẩu thành công');
-      setSeverity('success');
-      setOpenAlert(true);
-      setLoadingSubmit(false);
-      setOpenDialogForgetPassword(false);
-      reset();
-    }).catch(error => {
-      console.log(error);
-      if (error.response.data.message.trim() === 'Invalid code!!!') {
-        setMessageAlert('Mã xác nhận không chính xác');
-        setSeverity('error');
+    })
+      .then(() => {
+        setMessageAlert('Thay đổi mật khẩu thành công');
+        setSeverity('success');
         setOpenAlert(true);
-      } else {
-        setMessageAlert('Thay đổi mật khẩu không thành công, vui lòng thử lại');
-        setSeverity('error');
-        setOpenAlert(true);
-      }
-      setLoadingSubmit(false);
-    });
+        setLoadingSubmit(false);
+        setOpenDialogForgetPassword(false);
+        reset();
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error.response.data.message.trim() === 'Invalid code!!!') {
+          setMessageAlert('Mã xác nhận không chính xác');
+          setSeverity('error');
+          setOpenAlert(true);
+        } else {
+          setMessageAlert('Thay đổi mật khẩu không thành công, vui lòng thử lại');
+          setSeverity('error');
+          setOpenAlert(true);
+        }
+        setLoadingSubmit(false);
+      });
   };
 
   return (
@@ -696,52 +789,70 @@ function DialogForgetPassword({ openDialogForgetPassword, setOpenDialogForgetPas
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle>Quên mật khẩu</DialogTitle>
         <DialogContent>
-          <Grid container spacing={3} alignItems='center'>
+          <Grid container spacing={3} alignItems="center">
             <Grid item xs={12}>
-              <TextField sx={{ mt: 2 }} {...register('email')} label='Email' variant='outlined' fullWidth />
+              <TextField sx={{ mt: 2 }} {...register('email')} label="Email" variant="outlined" fullWidth />
               <p style={{ color: 'red' }}>{errors.email?.message}</p>
             </Grid>
             <Grid item xs={8}>
-              <TextField type='number' {...register('code')} label='Mã xác thực' variant='outlined' fullWidth />
+              <TextField type="number" {...register('code')} label="Mã xác thực" variant="outlined" fullWidth />
               <p style={{ color: 'red' }}>{errors.code?.message}</p>
             </Grid>
             <Grid item xs={4}>
-              <LoadingButton variant='contained' disabled={sentEmail} loading={loadingSendCode} onClick={() => {
-                setLoadingSendCode(true);
-                axios({
-                  url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.POST_SEND_CODE_CONFIRM_MAIL}?email=${getValues('email')}`,
-                  method: 'post',
-                  // headers:{
-                  //   Authorization: `Bearer ${token}`
-                  // }
-                }).then(() => {
-                  setSentEmail(true);
-                  setCountDown(60);
-                  setMessageAlert('Gửi mã xác thực thành công');
-                  setSeverity('success');
-                  setOpenAlert(true);
-                  setLoadingSendCode(false);
-                }).catch(error => {
-                  console.log(error);
-                  setMessageAlert('Gửi mã xác thực không thành công');
-                  setSeverity('error');
-                  setOpenAlert(true);
-                  setLoadingSendCode(false);
-                });
-              }}>{sentEmail ? countDown : 'Gửi mã'}</LoadingButton>
+              <LoadingButton
+                variant="contained"
+                disabled={sentEmail}
+                loading={loadingSendCode}
+                onClick={() => {
+                  setLoadingSendCode(true);
+                  axios({
+                    url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${
+                      api.POST_SEND_CODE_CONFIRM_MAIL
+                    }?email=${getValues('email')}`,
+                    method: 'post',
+                    // headers:{
+                    //   Authorization: `Bearer ${token}`
+                    // }
+                  })
+                    .then(() => {
+                      setSentEmail(true);
+                      setCountDown(60);
+                      setMessageAlert('Gửi mã xác thực thành công');
+                      setSeverity('success');
+                      setOpenAlert(true);
+                      setLoadingSendCode(false);
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                      setMessageAlert('Gửi mã xác thực không thành công');
+                      setSeverity('error');
+                      setOpenAlert(true);
+                      setLoadingSendCode(false);
+                    });
+                }}
+              >
+                {sentEmail ? countDown : 'Gửi mã'}
+              </LoadingButton>
             </Grid>
             <Grid item xs={12}>
-              <TextField type='password' {...register('password')} label='Mật khẩu mới' variant='outlined' fullWidth />
+              <TextField type="password" {...register('password')} label="Mật khẩu mới" variant="outlined" fullWidth />
               <p style={{ color: 'red' }}>{errors.password?.message}</p>
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button variant='outlined' onClick={() => {
-            setOpenDialogForgetPassword(false);
-            reset();
-          }}>Huỷ</Button>
-          <LoadingButton loading={loadingSubmit} type='submit' variant='contained'>Xác nhận</LoadingButton>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setOpenDialogForgetPassword(false);
+              reset();
+            }}
+          >
+            Huỷ
+          </Button>
+          <LoadingButton loading={loadingSubmit} type="submit" variant="contained">
+            Xác nhận
+          </LoadingButton>
         </DialogActions>
       </form>
     </Dialog>
