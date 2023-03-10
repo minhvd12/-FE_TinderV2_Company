@@ -1,26 +1,42 @@
 /* eslint-disable no-else-return */
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
-import { LoadingButton } from "@mui/lab";
-import { Card, Chip, CircularProgress, Divider, LinearProgress, Paper, Tab, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Tabs, TextField } from "@mui/material";
-import { Box, Container, Stack } from "@mui/system";
+import { LoadingButton } from '@mui/lab';
+import {
+  Card,
+  Chip,
+  CircularProgress,
+  Divider,
+  LinearProgress,
+  Paper,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TablePagination,
+  TableRow,
+  Tabs,
+  TextField,
+} from '@mui/material';
+import { Box, Container, Stack } from '@mui/system';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import axios from "axios";
-import dayjs from "dayjs";
-import { useEffect, useState } from "react";
-import Scrollbar from "../components/Scrollbar";
-import { TableEmptyRows, TableNoData } from "../components/table";
-import useTabs from "../hooks/useTabs";
-import CustomNoRowsOverlay from "../components/CustomNoRowsOverlay";
-import HeaderBreadcrumbs from "../components/HeaderBreadcrumbs";
-import Page from "../components/Page";
-import TableToolbar from "../components/TableToolbar";
-import TabPanel from "../components/TabPanel";
+import axios from 'axios';
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+import Scrollbar from '../components/Scrollbar';
+import { TableEmptyRows, TableNoData } from '../components/table';
+import useTabs from '../hooks/useTabs';
+import CustomNoRowsOverlay from '../components/CustomNoRowsOverlay';
+import HeaderBreadcrumbs from '../components/HeaderBreadcrumbs';
+import Page from '../components/Page';
+import TableToolbar from '../components/TableToolbar';
+import TabPanel from '../components/TabPanel';
 import { api, common } from '../constants';
-import useTable, { emptyRows, getComparator } from "../hooks/useTable";
-import TableHeadCustom from "../TableHeadCustom";
-import { TransTableRow, TransTableToolbar } from "../sections/@dashboard/transaction";
+import useTable, { emptyRows, getComparator } from '../hooks/useTable';
+import TableHeadCustom from '../TableHeadCustom';
+import { TransTableRow, TransTableToolbar } from '../sections/@dashboard/transaction';
 
 const TABLE_HEAD = [
   { id: 'no', label: 'No.', align: 'left' },
@@ -31,7 +47,6 @@ const TABLE_HEAD = [
 
   { id: '' },
 ];
-
 
 export default function HistoryTransaction() {
   const [tableData, setTableData] = useState([]);
@@ -60,11 +75,10 @@ export default function HistoryTransaction() {
 
   useEffect(() => {
     axios({
-      url: `https://itjobs.azurewebsites.net/api/v1/wallets?companyId=${localStorage.getItem("company_id")}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/wallets?companyId=${localStorage.getItem('company_id')}`,
       method: 'get',
     })
-      
-    .then((response) => {
+      .then((response) => {
         console.log(response);
         console.log(response.data.data[0].id);
         setWalletId(response.data.data[0].id);
@@ -74,22 +88,35 @@ export default function HistoryTransaction() {
             method: 'get',
           })
             .then((response) => {
-              console.log(response.data.data);
-              setTableData(response.data.data);
-              setLoadingData(false);
-              setrefeshdata(false);
+              console.log(response);
+              if (response.status === 204) {
+                setTableData([]);
+                console.log('hello');
+
+                setLoadingData(false);
+                setrefeshdata(false);
+              }
+              if (response.status === 200) {
+                setTableData(response.data.data);
+                console.log('hello');
+                setLoadingData(false);
+                setrefeshdata(false);
+              }
+              // setTableData(response.data.data);
+              // setLoadingData(false);
+              // setrefeshdata(false);
               // console.log(response.data.data);
             })
             .catch((error) => console.log(error));
         }
         if (filterStartDate !== null && filterEndDate !== null) {
-
           axios({
-            url: `https://itjobs.azurewebsites.net/api/v1/transactions?fromDate=${dayjs(filterStartDate).format('YYYY-MM-DD')}&toDate=${dayjs(filterEndDate).add(1, 'day').format('YYYY-MM-DD')}&walletId=${response.data.data[0].id}`,
+            url: `https://itjobs.azurewebsites.net/api/v1/transactions?fromDate=${dayjs(filterStartDate).format(
+              'YYYY-MM-DD'
+            )}&toDate=${dayjs(filterEndDate).add(1, 'day').format('YYYY-MM-DD')}&walletId=${response.data.data[0].id}`,
             method: 'get',
           })
             .then((response) => {
-
               console.log(response);
               if (response.status === 204) {
                 setTableData([]);
@@ -98,10 +125,10 @@ export default function HistoryTransaction() {
               }
               if (response.status === 200) {
                 setTableData(response.data.data);
+                console.log('hello');
                 setLoadingData(false);
                 setrefeshdata(false);
               }
-
             })
             .catch((error) => console.log(error));
         }
@@ -125,7 +152,7 @@ export default function HistoryTransaction() {
   //       // console.log(response.data.data);
   //     })
   //     .catch((error) => console.log(error));
-  //   } 
+  //   }
   //   if (filterStartDate !== null && filterEndDate !== null) {
 
   //     axios({
@@ -154,7 +181,6 @@ export default function HistoryTransaction() {
   // console.log(dayjs(filterStartDate).format('YYYY-MM-DD'))
   // console.log(dayjs(filterEndDate).format('YYYY-MM-DD'))
 
-
   const TABS = [
     { value: 3, label: 'Tất cả', color: 'info' },
     { value: 2, label: 'Tạo bài tuyển dụng', color: 'warning' },
@@ -166,31 +192,30 @@ export default function HistoryTransaction() {
     setPage(0);
   }, [filterStatus]);
 
-
   const dataFiltered = applySortFilter({
     tableData,
     comparator: getComparator(order, orderBy),
     filterStatus,
   });
 
-
   const denseHeight = dense ? 52 : 72;
 
   const isNotFound =
     (!dataFiltered.length && !!filterStatus) ||
     (!dataFiltered.length && !!filterEndDate) ||
-    (!dataFiltered.length && !!filterStartDate) || tableData === undefined || dataFiltered.length === 0;
+    (!dataFiltered.length && !!filterStartDate) ||
+    tableData === undefined ||
+    dataFiltered.length === 0;
 
   return (
     <Page title="Giao dịch">
-      <Container maxWidth='xl'>
+      <Container maxWidth="xl">
         <HeaderBreadcrumbs
           heading="Giao dịch"
           links={[
             { name: 'Trang chủ', href: '/company/dashboard' },
             { name: 'Giao dịch', href: '/company/history-transaction' },
           ]}
-
         />
 
         <Card>
@@ -203,13 +228,7 @@ export default function HistoryTransaction() {
             sx={{ px: 2, bgcolor: 'background.neutral' }}
           >
             {TABS.map((tab) => (
-              <Tab
-                disableRipple
-                key={tab.value}
-                value={tab.value}
-
-                label={tab.label}
-              />
+              <Tab disableRipple key={tab.value} value={tab.value} label={tab.label} />
             ))}
           </Tabs>
           <Divider />
@@ -228,14 +247,12 @@ export default function HistoryTransaction() {
               setLoadingData(true);
             }}
             onClear={() => {
-
               setFilterStartDate(null);
               setFilterEndDate(null);
               setLoadingData(true);
               setrefeshdata(true);
             }}
           />
-
 
           {loadingData ? (
             <LinearProgress fullwidth="true" />
@@ -250,12 +267,12 @@ export default function HistoryTransaction() {
                     rowCount={tableData.length}
                     numSelected={selected.length}
                     onSort={onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   onSelectAllRows(
-                  //     checked,
-                  //     tableData.map((row) => row.id)
-                  //   )
-                  // }
+                    // onSelectAllRows={(checked) =>
+                    //   onSelectAllRows(
+                    //     checked,
+                    //     tableData.map((row) => row.id)
+                    //   )
+                    // }
                   />
 
                   <TableBody>
@@ -264,7 +281,7 @@ export default function HistoryTransaction() {
                         key={row.id}
                         row={row}
                         index={index}
-                      // onLoading={() => setLoadingData(true)}
+                        // onLoading={() => setLoadingData(true)}
                       />
                     ))}
 
@@ -277,7 +294,7 @@ export default function HistoryTransaction() {
           )}
           <Box sx={{ position: 'relative' }}>
             <TablePagination
-              labelRowsPerPage={"Số hàng mỗi trang"}
+              labelRowsPerPage={'Số hàng mỗi trang'}
               labelDisplayedRows={({ from, to, count }) => `${from}-${to} trong ${count} `}
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
               component="div"
@@ -287,12 +304,9 @@ export default function HistoryTransaction() {
               onPageChange={onChangePage}
               onRowsPerPageChange={onChangeRowsPerPage}
             />
-
-
           </Box>
         </Card>
       </Container>
-
     </Page>
   );
 }
@@ -304,24 +318,23 @@ function applySortFilter({ tableData, comparator, filterStatus }) {
     return []; // or some other default value
   }
   const stabilizedThis = tableData.map((el, index) => [el, index]);
-  
+
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
-  
+
   // rest of the function
 
+  // function applySortFilter({ tableData, comparator, filterStatus }) {
+  //   const stabilizedThis = tableData.map((el, index) => [el, index]);
 
-// function applySortFilter({ tableData, comparator, filterStatus }) {
-//   const stabilizedThis = tableData.map((el, index) => [el, index]);
-  
-//   stabilizedThis.sort((a, b) => {
-//     const order = comparator(a[0], b[0]);
-//     if (order !== 0) return order;
-//     return a[1] - b[1];
-//   });
+  //   stabilizedThis.sort((a, b) => {
+  //     const order = comparator(a[0], b[0]);
+  //     if (order !== 0) return order;
+  //     return a[1] - b[1];
+  //   });
 
   tableData = stabilizedThis.map((el) => el[0]);
 
