@@ -175,7 +175,7 @@ export default function CompanyJobPost() {
   useEffect(() => {
     // setLoadingButton(true)
     axios({
-      url: `https://stg-api-itjob.unicode.edu.vn/api/v1/job-posts?companyId=${localStorage.getItem('company_id')}&status=${statusJobPost === 5 ? '' : statusJobPost}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/job-posts?companyId=${localStorage.getItem('company_id')}&status=${statusJobPost === 5 ? '' : statusJobPost}`,
       method: 'get',
     }).then((response) => {
       console.log(response);
