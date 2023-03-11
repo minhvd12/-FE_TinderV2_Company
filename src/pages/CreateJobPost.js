@@ -141,7 +141,7 @@ export default function CreateJobPost() {
 
   const debounceAddress = useCallback(debounce((nextValue) => {
     axios({
-      url: `https://provinces.open-api.vn/api/?depth=${nextValue}`,
+      url: `https://itjobs.azurewebsites.net/api/v1/address?name=${nextValue}`,
       method: 'get',
       // headers: {
       //   'Authorization': `Bearer ${token}`

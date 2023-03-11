@@ -85,9 +85,9 @@ export default function JobpostComanyTableRow({ row, onDeleteRow, onError, onRej
     row.job_post_skills.map((jobPostSkill) => axios({
       url: `${api.baseUrl}/${api.configPathType.api}/${api.versionType.v1}/${api.GET_SKILL}/${jobPostSkill.skill_id}`,
       method: 'get',
-      // headers: {
-      //   'Authorization': `Bearer ${token}`
-      // },
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
     }).then((response) => {
       setSkillDetail(prevState => ([...prevState, {
         skill: response.data.data.name,
@@ -114,8 +114,8 @@ export default function JobpostComanyTableRow({ row, onDeleteRow, onError, onRej
         url: `https://itjobs.azurewebsites.net/api/v1/job-posts/approval?id=${row.id}`,
         method: 'put',
         headers: {
-          Authorization: `Bearer ${token}`
-        },
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        },  
         data: {
           id: row.id,
           status: 0,
@@ -123,10 +123,12 @@ export default function JobpostComanyTableRow({ row, onDeleteRow, onError, onRej
         }
       }).then((response) => {
         console.log(response);
+        console.log("helo1");
         onDeleteRow();
         const action = minusMoney(row.money);
         dispatch(action);
       }).catch(error => {
+        console.log("helo1");
         onError();
         console.log(error);
       });
@@ -136,8 +138,8 @@ export default function JobpostComanyTableRow({ row, onDeleteRow, onError, onRej
         url: `https://itjobs.azurewebsites.net/api/v1/job-posts/approval?id=${row.id}`,
         method: 'put',
         headers: {
-          Authorization: `Bearer ${token}`
-        },
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }, 
         data: {
           id: row.id,
           status: 4,
@@ -145,10 +147,14 @@ export default function JobpostComanyTableRow({ row, onDeleteRow, onError, onRej
         }
       }).then((response) => {
         console.log(response);
+        console.log("helo2");
+
         onDeleteRow();
         const action = minusMoney(row.money);
         dispatch(action);
       }).catch(error => {
+        console.log("helo2");
+
         onError();
         console.log(error);
       });
@@ -405,7 +411,10 @@ export default function JobpostComanyTableRow({ row, onDeleteRow, onError, onRej
                         <Box display="inline" fontWeight="fontWeightBold">
                           Vị trí công việc:{' '}
                         </Box>
-                        {row.job_position.name}
+                        {/* {row.job_position.name} */}
+                        {console.log(row.job_position)}
+                        {console.log("name")}
+
                       </Typography>
                     </Stack>
                     <Stack direction="row">

@@ -35,7 +35,7 @@ export const GET_WORKINGSTYLE = 'working-styles';
 // Skill
 export const GET_SKILL = 'skills';
 // Address
-export const GET_ADDRESS = 'address';
+
 
 // Skill Level
 export const GET_SKILLLEVEL = 'skill-levels';
